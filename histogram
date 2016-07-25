@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+function data_to_histogram_row() {
+  local number=$1
+  local value=$2
+  local i=0
+  while test $i -lt $number
+  do
+    echo -n '*'
+    i=$(($i + 1))
+  done
+  echo
+}
+
+function histogram() {
+  i=0
+  while test $i -lt $times_to_test
+  do
+    node -e "$nodescript"
+    i=$(($i + 1))
+  done |
+  sort -gr | # sort highest to lowest, by numeric value
+  uniq -c |  # displaying a count of each gives a rough histogram
+  while IFS= read -r row
+  do
+    echo "$row $(data_to_histogram_row $row)"
+  done |
+  column -t
+}
+
+function main() {
+  while read row
+  do
+    echo "$row $(data_to_histogram_row $row)"
+  done < "${1:-/dev/stdin}" |
+  column -t
+}
+
+main "$@"

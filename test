@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -e -x
+
+cat test-data | sort | uniq -c | ./histogram
+
+echo
+cat test-data-2 | ./histogram
+
+echo
+./histogram test-data-2
+
+echo
+echo 'Buffalo buffalo Buffalo buffalo buffalo buffalo Buffalo buffalo' | tr ' ' '\n' | sort | uniq -c | ./histogram
+
+echo
+echo 'Bare bear bearing bare bear bear bare bear' | tr ' ' '\n' | sort | uniq -c | ./histogram
+
+echo
+echo success
